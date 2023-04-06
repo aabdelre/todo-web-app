@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(cors());
 
 mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    useNewUrlParser: true, 
+	useUnifiedTopology: true
 }).then(() => console.log("Connected to MongoDB")).catch(console.error);
 
 app.get('/todos', async (req, res) => {
@@ -38,7 +38,7 @@ app.get('/todo/complete/:id', async (req, res) => {
     todo.complete = !todo.complete;
     todo.save();
     res.json(todo);
-})
+});
 //async function connect() {
 //    try {
 //        await mongoose.connect(url, {
@@ -57,5 +57,11 @@ app.get('/todo/complete/:id', async (req, res) => {
 //}).then(() => console.log("Connected to MongoDB")).catch(console.error);
 
 // Models
+app.put('/todo/update/:id', async (req, res) => {
+    const todo = await Todo.findById(req.params.id);
+    todo.text = req.body.text;
+	todo.save();
+	res.json(todo);
+});
 
 app.listen(4000, () => console.log("Server started on port 4000"));
