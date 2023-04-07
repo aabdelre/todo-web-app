@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const url = "mongodb+srv://aa_todo:bencil10@todo.ufnnbt3.mongodb.net/?retryWrites=true&w=majority";
+const url = "mongodb+srv://<username>:<password>@todo.ufnnbt3.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
 
 app.use(express.json());
