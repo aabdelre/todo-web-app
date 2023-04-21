@@ -14,6 +14,10 @@ const TodoSchema = new Schema({
         type: String,
         default: false
     },
+    due_date: {
+        type: String,
+        default: Date.now()
+    }
 });
 
 const Todo = mongoose.model("Todo", TodoSchema);

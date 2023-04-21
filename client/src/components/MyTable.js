@@ -1,40 +1,36 @@
 import React, {useEffect, useState} from "react";
-const api_base = 'http://localhost:3001';
-function MyTable() {
-    const [tableData, setTableData] = useState([]);
-    const GetTodos = () => {
-        fetch(api_base + '/todos')
-            .then(res => res.json())
-            .then(data => setTableData(data))
-            .catch((err) => console.error("Error: ", err));
-    };
-    useEffect(() => {
-        GetTodos();
-    }, []);
+import Moment from 'moment';
+Moment.locale('en');
 
-    const handleDelete = async id => {
-        const data = await fetch(api_base + '/todo/delete/' + id, {method: "DELETE"}).then(res => res.json());
-        setTableData(tableData => tableData.filter(todo => todo.id !== data.result._id));
-    };
+const status_map = {
+    "todo" : "To-Do",
+    "inprogress" : "In Progress",
+    "done" : "Done"
+}
+const MyTable = (props) => {
+    useEffect(() => {
+        props.GetTodos();
+    }, []);
 
     return (
         <table>
             <thead>
             <tr>
                 <th>Title</th>
-                <th>Description</th>
                 <th>Status</th>
+                <th>Due Date</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            {tableData.map((row, index) => (
+            {props.todos.map((row, index) => (
                 <tr key={index}>
                     <td>{row.title}</td>
-                    <td>{row.description}</td>
-                    <td>{row.status}</td>
+                    <td>{status_map[row.status]}</td>
+                    <td>{Moment(new Date(row.due_date)).format('MM/DD/YYYY')}</td>
                     <td>
-                        <button onClick={() => handleDelete(row._id)}>Delete</button>
+                        <div className="action" onClick={() => props.deleteTodo(row._id)}>Delete</div>&nbsp;
+                        <div className="action" onClick={() => props.handleEdit(row)}>Edit</div>
                     </td>
                 </tr>
             ))}
@@ -43,12 +39,4 @@ function MyTable() {
     );
 }
 
-function App() {
-    return (
-        <div>
-            <MyTable />
-        </div>
-    );
-}
-
-export default App;
+export default MyTable;
