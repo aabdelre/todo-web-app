@@ -24,7 +24,9 @@ app.get('/todos', async (req, res) => {
 
 app.post('/todo/new', (req, res) => {
 	const todo = new Todo({
-		text: req.body.text
+		title: req.body.title,
+		description: req.body.description,
+		status: req.body.status
 	})
 
 	todo.save();
@@ -44,7 +46,7 @@ app.get('/todo/complete/:id', async (req, res) => {
         todo.complete = !todo.complete;
         todo.save();
         res.json(todo);
-    };	
+    };
 });
 
 app.put('/todo/update/:id', async (req, res) => {
@@ -56,5 +58,7 @@ app.put('/todo/update/:id', async (req, res) => {
 
 	res.json(todo);
 });
-
+app.get('/',(req, res) => {
+	res.send('Hello World!');
+});
 app.listen(3001, () => console.log("Server started on port 3001"));
