@@ -16,7 +16,7 @@ function App() {
 	const [newTodoStatus, setNewStatus] = useState("todo");
 	const [newDueDate, setNewDueDate] = useState(new Date());
 	const [errorMessage, setErrorMessage] = useState("");
-
+	
 	const completeTodo = async (id) => {
         const response = await fetch(api_base + "/todo/complete/" + id);
         const data = await response.json();
@@ -115,11 +115,38 @@ function App() {
 			.catch((err) => console.error("Error: ", err));
 	};
 
+	const sortByDate = () => {
+		console.log("sorting by date");
+		fetch(api_base + '/todos')
+			.then(res => res.json())
+			.then(data => setTodos(data?.sort((a,b) => new Date(a.due_date) - new Date(b.due_date))))
+			.catch((err) => console.error("Error: ", err));
+	};
+
+	const sortByTitle = () => {
+		console.log("sorting by title");
+		fetch(api_base + '/todos')
+			.then(res => res.json())
+			.then(data => setTodos(data?.sort((a,b) => (a.title > b.title) ? 1 : -1)))
+			.catch((err) => console.error("Error: ", err));
+	};
+
+	const sortByStatus = () => {
+		console.log("sorting by status");
+		fetch(api_base + '/todos')
+			.then(res => res.json())
+			.then(data => setTodos(data?.sort((a,b) => (a.status > b.status) ? 1 : -1)))
+			.catch((err) => console.error("Error: ", err));
+	};
+
 	return (
 		<div className="App">
 			<h1>Welcome!</h1>
 			<h4>Your tasks</h4>
 			<div className="addPopup" onClick={() => setPopupActive(true)}>+</div>
+			<div className="sort_by_date" onClick={() => sortByDate()}>Sort by Date</div>
+			<div className="sort_by_title" onClick={() => sortByTitle()}>Sort by Title</div>
+			<div className="sort_by_status" onClick={() => sortByStatus()}>Sort by Status</div>
 			<div className="table_container">
 				<MyTable handleEdit={handleEdit} deleteTodo={deleteTodo} GetTodos={GetTodos} todos={todos}/>
 			</div>

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const url = "mongodb+srv://shantalag4:$hahapurb0y@cluster0.wqlzveo.mongodb.net/?retryWrites=true&w=majority"
+const url = "mongodb+srv://aa_todo:bencil10@todo.ufnnbt3.mongodb.net/?retryWrites=true&w=majority"
 const app = express();
 
 const valid_statuses = ["todo", "inprogress", "done"]
