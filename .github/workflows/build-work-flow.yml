@@ -11,14 +11,6 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Create secrets file
-        run: cp ./env-config/todo-app-env-config.yaml.sample ./env-config/todo-app-env-config.yaml
-      - name: Update mongodb username
-        run: sed -i '' -e "s/___MONGODB_USERNAME___/${{ secrets.MONGODB_USERNAME }}/g" ./env-config/todo-app-env-config.yaml
-      - name: Update mongodb password
-        run: sed -i '' -e "s/___MONGODB_PASSWORD___/${{ secrets.MONGODB_PASSWORD }}/g" ./env-config/todo-app-env-config.yaml
-      - name: Update mongodb hostname
-        run: sed -i '' -e "s/___MONGODB_CLUSTER_HOSTNAME___/${{ secrets.MONGODB_CLUSTER_HOSTNAME }}/g" ./env-config/todo-app-env-config.yaml
       - name: Log in to DO Container Registry
         run: doctl registry login --expiry-seconds 1200
       - name: Build reverse proxy image
