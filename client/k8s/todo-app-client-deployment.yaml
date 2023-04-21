@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: todo-app-client
+  name: todo-app-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: todo-app-client
+  template:
+    metadata:
+      labels:
+        service: todo-app-client
+    spec:
+      containers:
+        - image: registry.digitalocean.com/first-registry-shantala/todo-app:client
+          name: todo-app-api
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+      restartPolicy: Always

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: todo-app-api
+  name: todo-app-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: todo-app-api
+  template:
+    metadata:
+      labels:
+        service: todo-app-api
+    spec:
+      containers:
+        - image: registry.digitalocean.com/first-registry-shantala/todo-ap:api
+          name: todo-app-api
+          imagePullPolicy: Always
+          env:
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: MONGODB_USERNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: MONGODB_USERNAME
+            - name: MONGODB_CLUSTER_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: MONGODB_CLUSTER_HOSTNAME
+          ports:
+            - containerPort: 3001
+      restartPolicy: Always
