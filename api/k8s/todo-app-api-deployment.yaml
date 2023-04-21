@@ -22,17 +22,17 @@ spec:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: env-secret
+                  name: todo-app-env-secret
                   key: MONGODB_USERNAME
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: env-secret
+                  name: todo-app-env-secret
                   key: MONGODB_USERNAME
             - name: MONGODB_CLUSTER_HOSTNAME
               valueFrom:
                 secretKeyRef:
-                  name: env-secret
+                  name: todo-app-env-secret
                   key: MONGODB_CLUSTER_HOSTNAME
           ports:
             - containerPort: 3001

@@ -27,8 +27,6 @@ jobs:
         run: docker push registry.digitalocean.com/${{ secrets.DIGITALOCEAN_DOCKER_REPO_NAME }}/todo-app:client
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DIGITALOCEAN_K8S_CLUSTER_NAME }}
-      - name: Apply config
-        run: kubectl create -f env-config/todo-app-env-config.yaml
       - name: Apply API deployment
         run: kubectl apply -f api/k8s/todo-app-api-deployment.yaml
       - name: Apply API deployment
