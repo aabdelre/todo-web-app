@@ -6,7 +6,6 @@ const config = require("./config")
 const url = "mongodb+srv://" + config.mongodb.username + ":" + config.mongodb.password + "@" + config.mongodb.hostname + "/?retryWrites=true&w=majority"
 const app = express();
 
-
 const valid_statuses = ["todo", "inprogress", "done"]
 
 app.use(express.json());
