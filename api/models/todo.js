@@ -2,17 +2,25 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TodoSchema = new Schema({
-    text: {
+    title: {
         type: String,
         required: true
     },
-    complete: {
-        type: Boolean,
+    description: {
+        type: String,
         default: false
     },
-    timestamp: {
+    status: {
+        type: String,
+        default: false
+    },
+    due_date: {
         type: String,
         default: Date.now()
+    },
+    user_name: {
+        type: String,
+        default: false
     }
 });
 
