@@ -37,6 +37,19 @@ h4 {
     margin-bottom: 16px;
 }
 
+.signout-button {
+    padding: 16px 32px;
+    border-radius: 99px;
+    background-image: linear-gradient(to right, var(--primary), var(--secondary));
+    display: inline-block;
+    font-weight: 700;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-top: 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
 .todo {
     position: relative;
     background-color: var(--dark);
@@ -211,7 +224,7 @@ h4 {
 .sort_by_status {
     position: fixed;
     right: 32px;
-    bottom: 400px;
+    bottom: 315px;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -229,7 +242,7 @@ h4 {
 .sort_by_title {
     position: fixed;
     right: 32px;
-    bottom: 300px;
+    bottom: 200px;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -241,5 +254,30 @@ h4 {
     font-weight: 900;
     color: var(--light);
     background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    cursor: pointer;
+}
+
+.username {
+    appearance: none;
+    border: none;
+    outline: none;
+    background-color: #FFF;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    font-size: 20px;
+}
+
+.logbutton {
+    padding: 16px 32px;
+    border-radius: 99px;
+    background-image: linear-gradient(to right, var(--primary), var(--secondary));
+    display: inline-block;
+    font-weight: 700;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-top: 16px;
+    text-align: center;
     cursor: pointer;
 }

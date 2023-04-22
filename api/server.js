@@ -30,7 +30,8 @@ app.post('/todo/new', (req, res) => {
 			title: req.body.title,
 			description: req.body.description,
 			status: req.body.status,
-			due_date: req.body.due_date
+			due_date: req.body.due_date,
+			user_name: req.body.user_name
 		});
 		todo.save();
 		res.json({status:"success", todo: todo});
@@ -60,6 +61,7 @@ app.put('/todo/update/:id', async (req, res) => {
 		todo.description = req.body.description;
 		todo.status = req.body.status;
 		todo.due_date = req.body.due_date;
+		todo.user_name = req.body.user_name;
 		todo.save();
 		res.json({status:"success", todo: todo});
 	} else {

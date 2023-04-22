@@ -8,6 +8,8 @@ const api_base = 'http://localhost:3001';
 
 function App() {
 	const [todos, setTodos] = useState([]);
+	const [user, setUser] = useState("");
+	const [login, setLogin] = useState(false);
 	const [popupActive, setPopupActive] = useState(false);
 	const [editPopupActive, setEditPopupActive] = useState(false);
 	const [newTodo, setNewTodo] = useState("");
@@ -32,6 +34,7 @@ function App() {
     };
 
 	const addTodo = async () => {
+		const UserName = user;
 		const data = await fetch(api_base + "/todo/new", {
 			method: "POST",
 			headers: {
@@ -39,6 +42,7 @@ function App() {
 			},
 			body: JSON.stringify({
 				title: newTodo,
+				user_name: UserName,
 				description: newTodoDescription,
 				status: newTodoStatus,
 				due_date: newDueDate
@@ -53,6 +57,7 @@ function App() {
 		setNewTodo("");
 		setNewDescription("");
 		setNewStatus("todo");
+		//setUser("");
 		setNewDueDate(new Date());
 	};
 
@@ -75,7 +80,8 @@ function App() {
 				title: newTodo,
 				description: newTodoDescription,
 				status: newTodoStatus,
-				due_date: newDueDate
+				due_date: newDueDate,
+				user_name: user
 			})
 		}).then(res => res.json());
 		if (data.status === "success") {
@@ -85,6 +91,7 @@ function App() {
 					todo.status = data.todo.status;
 					todo.title = data.todo.title;
 					todo.due_date = data.todo.due_date;
+					todo.user_name = data.todo.user_name;
 				}
 			})
 			setTodos(todos);
@@ -111,7 +118,7 @@ function App() {
 	const GetTodos = () => {
 		fetch(api_base + '/todos')
 			.then(res => res.json())
-			.then(data => setTodos(data))
+			.then(data => setTodos(data.filter(todo => todo.user_name === user)))
 			.catch((err) => console.error("Error: ", err));
 	};
 
@@ -119,7 +126,7 @@ function App() {
 		console.log("sorting by date");
 		fetch(api_base + '/todos')
 			.then(res => res.json())
-			.then(data => setTodos(data?.sort((a,b) => new Date(a.due_date) - new Date(b.due_date))))
+			.then(data => setTodos(data.filter(todo => todo.user_name === user)?.sort((a,b) => new Date(a.due_date) - new Date(b.due_date))))
 			.catch((err) => console.error("Error: ", err));
 	};
 
@@ -127,7 +134,7 @@ function App() {
 		console.log("sorting by title");
 		fetch(api_base + '/todos')
 			.then(res => res.json())
-			.then(data => setTodos(data?.sort((a,b) => (a.title > b.title) ? 1 : -1)))
+			.then(data => setTodos(data.filter(todo => todo.user_name === user)?.sort((a,b) => (a.title > b.title) ? 1 : -1)))
 			.catch((err) => console.error("Error: ", err));
 	};
 
@@ -135,79 +142,100 @@ function App() {
 		console.log("sorting by status");
 		fetch(api_base + '/todos')
 			.then(res => res.json())
-			.then(data => setTodos(data?.sort((a,b) => (a.status > b.status) ? 1 : -1)))
+			.then(data => setTodos(data.filter(todo => todo.user_name === user)?.sort((a,b) => (a.status > b.status) ? 1 : -1)))
 			.catch((err) => console.error("Error: ", err));
 	};
-
+	//console.log(user);
+	console.log(todos);
 	return (
 		<div className="App">
-			<h1>Welcome!</h1>
-			<h4>Your tasks</h4>
-			<div className="addPopup" onClick={() => setPopupActive(true)}>+</div>
-			<div className="sort_by_date" onClick={() => sortByDate()}>Sort by Date</div>
-			<div className="sort_by_title" onClick={() => sortByTitle()}>Sort by Title</div>
-			<div className="sort_by_status" onClick={() => sortByStatus()}>Sort by Status</div>
-			<div className="table_container">
-				<MyTable handleEdit={handleEdit} deleteTodo={deleteTodo} GetTodos={GetTodos} todos={todos}/>
-			</div>
-			{popupActive ? (
-				<div className="popup">
-					<div className="closePopup" onClick={() => setPopupActive(false)}>X</div>
-					<div className="content">
-						<h3>Add Task</h3>
-						<h4>Title</h4>
-						<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
-						<br/>
-						<h4>Description</h4>
-						<textarea className="add-todo-input" onChange={e => setNewDescription(e.target.value)} value={newTodoDescription} />
-						<br/>
-						<h4>Status</h4>
-						<select className="add-todo-input" onChange={e => setNewStatus(e.target.value)} value={newTodoStatus}>
-							<option value="todo">To-Do</option>
-							<option value="inprogress">In Progress</option>
-							<option value="done">Done</option>
-						</select>
-						<br/>
-						<h4>Due Date</h4>
-						<DatePicker className="add-todo-input" selected={newDueDate} onChange={(date) => setNewDueDate(date)} />
-						<br/>
-						<div className="button" onClick={addTodo}>Create Task</div>
+			{login ? (
+				<div className="logged_in">
+					<h1>Welcome, {user}!</h1>
+					<h4>Your tasks</h4>
+					<button className="signout-button" onClick={() => setLogin(false)}> Sign Out </button>
+					<div className="addPopup" onClick={() => setPopupActive(true)}>+</div>
+					<div className="sort_by_date" onClick={() => sortByDate()}>Sort by Date</div>
+					<div className="sort_by_title" onClick={() => sortByTitle()}>Sort by Title</div>
+					<div className="sort_by_status" onClick={() => sortByStatus()}>Sort by Status</div>
+					<div className="table_container">
+						<MyTable handleEdit={handleEdit} deleteTodo={deleteTodo} GetTodos={GetTodos} todos={todos}/>
 					</div>
-				</div>
-			) : ''}
-			{editPopupActive ? (
-				<div className="popup">
-					<div className="closePopup" onClick={() => setEditPopupActive(false)}>X</div>
-					<div className="content">
-						<h3>Edit Task</h3>
-						<h4>Title</h4>
-						<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
-						<br/>
-						<h4>Description</h4>
-						<textarea className="add-todo-input" onChange={e => setNewDescription(e.target.value)} value={newTodoDescription} />
-						<br/>
-						<h4>Status</h4>
-						<select className="add-todo-input" onChange={e => setNewStatus(e.target.value)} value={newTodoStatus}>
-							<option value="todo">To-Do</option>
-							<option value="inprogress">In Progress</option>
-							<option value="done">Done</option>
-						</select>
-						<br/>
-						<h4>Due Date</h4>
-						<DatePicker className="add-todo-input" selected={newDueDate} onChange={(date) => setNewDueDate(date)} />
-						<div className="button" onClick={editTodo}>Update Task</div>
+					
+					{popupActive ? (
+						<div className="popup">
+							<div className="closePopup" onClick={() => setPopupActive(false)}>X</div>
+							<div className="content">
+								<h3>Add Task</h3>
+								<h4>Title</h4>
+								<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
+								<br/>
+								<h4>Description</h4>
+								<textarea className="add-todo-input" onChange={e => setNewDescription(e.target.value)} value={newTodoDescription} />
+								<br/>
+								<h4>Status</h4>
+								<select className="add-todo-input" onChange={e => setNewStatus(e.target.value)} value={newTodoStatus}>
+									<option value="todo">To-Do</option>
+									<option value="inprogress">In Progress</option>
+									<option value="done">Done</option>
+								</select>
+								<br/>
+								<h4>Due Date</h4>
+								<DatePicker className="add-todo-input" selected={newDueDate} onChange={(date) => setNewDueDate(date)} />
+								<br/>
+								<div className="button" onClick={addTodo}>Create Task</div>
+							</div>
+						</div>
+					) : ''}
+					{editPopupActive ? (
+						<div className="popup">
+							<div className="closePopup" onClick={() => setEditPopupActive(false)}>X</div>
+							<div className="content">
+								<h3>Edit Task</h3>
+								<h4>Title</h4>
+								<input type="text" className="add-todo-input" onChange={e => setNewTodo(e.target.value)} value={newTodo} />
+								<br/>
+								<h4>Description</h4>
+								<textarea className="add-todo-input" onChange={e => setNewDescription(e.target.value)} value={newTodoDescription} />
+								<br/>
+								<h4>Status</h4>
+								<select className="add-todo-input" onChange={e => setNewStatus(e.target.value)} value={newTodoStatus}>
+									<option value="todo">To-Do</option>
+									<option value="inprogress">In Progress</option>
+									<option value="done">Done</option>
+								</select>
+								<br/>
+								<h4>Due Date</h4>
+								<DatePicker className="add-todo-input" selected={newDueDate} onChange={(date) => setNewDueDate(date)} />
+								<div className="button" onClick={editTodo}>Update Task</div>
+							</div>
+						</div>
+					) : ''}
+					{errorMessage ? (
+						<div className="popup">
+							<div className="closePopup" onClick={() => setErrorMessage("")}>X</div>
+							<div className="content">
+								<h3>Operation Failed</h3>
+								<h4>{errorMessage}</h4>
+							</div>
+						</div>
+					) : ''}
+				</div>) : (
+				<div className="login">
+					<div className="auth-container"> 
+						<h4>Enter your Username!</h4>
+						<div className="auth-container-box">
+							<form>
+								<input type="text" className="username" onChange={e => setUser(e.target.value)} value={user}></input>
+							</form>
+							<div className="auth-options">
+								<button className="logbutton" onClick={() => setLogin(true)}> Log In </button>
+							</div>
+						</div>
 					</div>
-				</div>
-			) : ''}
-			{errorMessage ? (
-				<div className="popup">
-					<div className="closePopup" onClick={() => setErrorMessage("")}>X</div>
-					<div className="content">
-						<h3>Operation Failed</h3>
-						<h4>{errorMessage}</h4>
-					</div>
-				</div>
-			) : ''}
+				</div>)}
+			
+			
 		</div>
 	);
 }

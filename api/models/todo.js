@@ -17,6 +17,10 @@ const TodoSchema = new Schema({
     due_date: {
         type: String,
         default: Date.now()
+    },
+    user_name: {
+        type: String,
+        default: false
     }
 });
 
