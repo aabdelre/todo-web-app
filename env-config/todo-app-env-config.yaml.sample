@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: env-secret
+type: Opaque
+data:
+  MONGODB_USERNAME: ___MONGODB_USERNAME___
+  MONGODB_CLUSTER_HOSTNAME: ___MONGODB_CLUSTER_HOSTNAME___
+  MONGODB_PASSWORD: ___MONGODB_PASSWORD___

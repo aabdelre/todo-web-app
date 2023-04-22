@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const api_base = 'http://localhost:3001';
+const api_base = "";
 
 function App() {
 	const [todos, setTodos] = useState([]);

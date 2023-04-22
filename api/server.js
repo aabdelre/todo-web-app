@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const config = require("./config")
 
-const url = "mongodb+srv://aa_todo:bencil10@todo.ufnnbt3.mongodb.net/?retryWrites=true&w=majority"
+const url = "mongodb+srv://" + config.mongodb.username + ":" + config.mongodb.password + "@" + config.mongodb.hostname + "/?retryWrites=true&w=majority"
 const app = express();
 
 const valid_statuses = ["todo", "inprogress", "done"]
@@ -16,7 +17,7 @@ mongoose.connect(url, {
 }).then(() => console.log("Connected to MongoDB")).catch(console.error);
 
 // Models
-const Todo = require('./models/Todo');
+const Todo = require('./models/todo');
 
 app.get('/todos', async (req, res) => {
 	const todos = await Todo.find();
