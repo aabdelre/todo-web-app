@@ -15,7 +15,7 @@ spec:
         service: todo-app-api
     spec:
       containers:
-        - image: registry.digitalocean.com/first-registry-shantala/todo-ap:api
+        - image: registry.digitalocean.com/first-registry-shantala/todo-app:api
           name: todo-app-api
           imagePullPolicy: Always
           env:
@@ -28,7 +28,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: todo-app-env-secret
-                  key: MONGODB_USERNAME
+                  key: MONGODB_PASSWORD
             - name: MONGODB_CLUSTER_HOSTNAME
               valueFrom:
                 secretKeyRef:

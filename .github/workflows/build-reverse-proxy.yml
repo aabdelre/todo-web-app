@@ -1,0 +1,21 @@
+name: Build reverse proxy
+on: [workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DO Container Registry
+        run: doctl registry login --expiry-seconds 1200
+      - name: Build reverse proxy image
+        run: docker build --platform linux/amd64 -t registry.digitalocean.com/${{ secrets.DIGITALOCEAN_DOCKER_REPO_NAME }}/todo-app:rp ./reverse-proxy
+      - name: Push reverse proxy image to DO Container Registry
+        run: docker push registry.digitalocean.com/${{ secrets.DIGITALOCEAN_DOCKER_REPO_NAME }}/todo-app:rp
+      - name: Cleaning up DO container registry
+        run: doctl registry garbage-collection start --include-untagged-manifests --force
